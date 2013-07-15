@@ -1,0 +1,1 @@
+gc_paraflare_flare_options_displayed = false;

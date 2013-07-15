@@ -1,0 +1,161 @@
+#include "gcam\gcam_component.hpp"
+#include "defines.hpp"
+#include "build_recipe_dialog.hpp"
+#include "build_recipe_list_dialog.hpp"
+
+#include "cfgbuildingloot.hpp"
+#include "cfgLoot.hpp"
+
+#include "carradio\description.h"
+
+respawn = "BASE";
+respawndelay = 5;
+onLoadMission= "DayZ Celle";
+OnLoadIntro = "Welcome to Celle";
+OnLoadIntroTime = False;
+OnLoadMissionTime = False;
+disabledAI = true;
+disableChannels[]={2,6};
+enableItemsDropping = 0;
+onPauseScript = "fixes\player_onPause.sqf";
+loadScreen = "manatee\intro\Manatee.jpg";
+class Header
+{
+ gameType = COOP;            //DM, Team, Coop, ...
+ minPlayers = 1;             //min # of players the mission supports
+ maxPlayers = 50;            //Max # of players the mission supports
+};
+
+aiKills = 1;
+diagRadio = 1;
+diagHit = 1;
+
+//
+// the loading screen itself
+//
+class DayZ_loadingScreen
+{ 
+	idd = -1;
+	duration = 10e10;
+	fadein = 0;
+	fadeout = 0;
+	name = "loading screen";
+	class controlsBackground
+	{
+		class blackBG : RscText
+		{
+			x = safezoneX;
+			y = safezoneY;
+			w = safezoneW;
+			h = safezoneH;
+			text = "";
+			colorText[] = {0,0,0,0};
+			colorBackground[] = {0,0,0,1};
+		};
+		/*
+		class nicePic : RscPicture
+		{
+			style = 48 + 0x800; // ST_PICTURE + ST_KEEP_ASPECT_RATIO
+			x = safezoneX + safezoneW/2 - 0.25;
+			y = safezoneY + safezoneH/2 - 0.2;
+			w = 0.5;
+			h = 0.4;
+			text = "img\nicePic.paa";
+		};
+		*/
+	};
+	class controls
+	{
+		class Title1 : RscLoadingText
+		{
+			text = "$STR_LOADING"; // "Loading" text in the middle of the screen
+		};
+		class CA_Progress : RscProgress // progress bar, has to have idc 104
+		{
+			idc = 104;
+			type = 8; // CT_PROGRESS
+			style = 0; // ST_SINGLE
+			texture = "\ca\ui\data\loadscreen_progressbar_ca.paa";
+		};
+		class CA_Progress2 : RscProgressNotFreeze // progress bar that will go reverse
+		{
+			idc = 103;
+		};
+		class Name2: RscText // the text on the top-left
+		{
+			idc = 101;
+			x = 0.05;
+			y = 0.029412;
+			w = 0.9;
+			h = 0.04902;
+			text = "";
+			sizeEx = 0.05;
+			colorText[] = {0.543,0.5742,0.4102,1.0};
+		};
+	};
+};
+
+class RscTitles // Intro logo
+{
+	class logo
+	{
+		idd=-1;
+		movingEnable = 0;
+		duration=12;
+		name = "logo";
+		controls[]=
+		{
+			Picture
+		};  
+		class Picture : RscPicture
+		{
+			x = -0.4;
+ 			y = -0.2;
+ 			w = 0.15; 
+			h = 0.2;
+			text = "manatee\intro\logo.paa";
+			sizeEx = 1;
+			style=48;
+		};
+	};
+};
+
+// Custom Sounds
+class CfgSounds
+{
+    sounds[] = {};
+ 
+    class playerSnoring
+    {
+    name="playerSnoring";
+    sound[]={"manatee\sounds\snoring.ogg",0.9,1};
+    titles[] = {};
+    };
+	class gc_paraflare_shoot
+	{
+	name = "gc_paraflare_shoot";
+	sound[] = {"manatee\sounds\paraflare_shoot.ogg", 1, 1};
+	titles[] = {};
+	};
+	class nam
+	{
+	name = "Siren1";
+	sound[] = {"manatee\sounds\SirenLoopMono.ogg", db-6, 1.0};
+	titles[] = {""};
+	};
+	class eve
+	{
+	name = "Siren2";
+	sound[] = {"manatee\sounds\Sirens.ogg", db-6, 1.0};
+	titles[] = {""};
+	};
+	class puk
+	{
+	name = "Siren3";
+	sound[] = {"manatee\sounds\Sirens2.ogg", db-6, 1.0};
+	titles[] = {""};
+	};
+};
+
+#include "addons\SARGE\SAR_define.hpp"
+#include "R3F_Realism\R3F_Weight\R3F_CfgWeight.h"

@@ -1,0 +1,1 @@
+cuttext [format ["Player: %1 | Humanity: %2",(name cursorTarget),(cursorTarget getVariable['humanity', 0])],"PLAIN DOWN",1];
